@@ -1,13 +1,16 @@
 package com.atis.remitly_project;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/swift-codes")
@@ -30,13 +33,33 @@ public class SwiftCodeController {
     // curl.exe -X GET "http://localhost:8080/v1/swift-codes/country/AL" -H "Content-Type: application/json"
 
     @PostMapping
-    public ResponseEntity<MessageResponseDTO> addSwiftCode(@RequestBody SwiftCodeDTO swiftCodeDTO) {
+    public ResponseEntity<MessageResponseDTO> addSwiftCode(@Valid @RequestBody SwiftCodeDTO swiftCodeDTO) {
         return ResponseEntity.ok(swiftCodeService.addSwiftCode(swiftCodeDTO));
     }
-    // PS C:\Users\nosta\Desktop\remitly\Interview_exercise> curl.exe -X POST 'http://localhost:8080/v1/swift-codes' `
-    //>> -H 'Content-Type: application/json' `
-    //>> -d '{\"address\": \"ul. Pulawska 15, 02-515 Warszawa\", \"bankName\": \"PKO Bank Polski\", \"countryISO2\": \"PL\", \"countryName\": \"Poland\", \"headquarter\": true, \"swiftCode\": \"AAAAAAAAXXX\"}'
-    //{"message":"Swift code added successfully"}
+
+    @ExceptionHandler(SwiftCodeValidationException.class)
+    public ResponseEntity<MessageResponseDTO> handleValidationException(SwiftCodeValidationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponseDTO(e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<MessageResponseDTO> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponseDTO(String.join(", ", errors)));
+    }
+
+    //  curl.exe -X POST 'http://localhost:8080/v1/swift-codes' `
+    // -H 'Content-Type: application/json' `
+    // -d '{\"address\": \"Ul. SZARA KRAKÓW\", \"bankName\": \"PKO BANK POLSKI\", \"countryISO2\": \"PL\", \"countryName\": \"POLAND\", \"headquarter\": true, \"swiftCode\": \"AAAAACAAXXX\"}'
 
     @DeleteMapping("/{swiftCode}")
     public ResponseEntity<MessageResponseDTO> deleteSwiftCode(@PathVariable String swiftCode) {

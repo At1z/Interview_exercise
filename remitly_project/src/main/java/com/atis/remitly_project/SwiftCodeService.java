@@ -68,16 +68,19 @@ public class SwiftCodeService {
     }
 
     public MessageResponseDTO addSwiftCode(SwiftCodeDTO swiftCodeDTO) {
+        // Perform custom validation
+        swiftCodeDTO.validate();
+
         if (swiftCodeRepository.findBySwiftCode(swiftCodeDTO.getSwiftCode()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Swift code already exists");
         }
 
         SwiftCode swiftCode = new SwiftCode();
-        swiftCode.setAddress(swiftCodeDTO.getAddress());
-        swiftCode.setBankName(swiftCodeDTO.getBankName());
+        swiftCode.setAddress(swiftCodeDTO.getAddress().toUpperCase());
+        swiftCode.setBankName(swiftCodeDTO.getBankName().toUpperCase());
         swiftCode.setCountryISO2(swiftCodeDTO.getCountryISO2().toUpperCase());
         swiftCode.setCountryName(swiftCodeDTO.getCountryName().toUpperCase());
-        swiftCode.setSwiftCode(swiftCodeDTO.getSwiftCode());
+        swiftCode.setSwiftCode(swiftCodeDTO.getSwiftCode().toUpperCase());
 
         swiftCodeRepository.save(swiftCode);
         return new MessageResponseDTO("Swift code added successfully");
