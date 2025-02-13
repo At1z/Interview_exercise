@@ -2,6 +2,8 @@ package com.atis.remitly_project;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
@@ -19,13 +21,28 @@ public class SwiftCodeService {
         }
 
         SwiftCodeDTO dto = convertToDTO(code);
+        String searchPrefix = swiftCode.substring(0, 8);
 
-        if (code.isHeadquarter()) {
-            String headquarterPrefix = swiftCode.substring(0, 8);
-            List<SwiftCode> branches = swiftCodeRepository.findAll().stream()
-                    .filter(b -> !b.isHeadquarter() && b.getSwiftCode().startsWith(headquarterPrefix))
-                    .collect(Collectors.toList());
+        if (!code.isHeadquarter()) {
+            String potentialHQCode = searchPrefix + "XXX";
+            SwiftCode headquarter = swiftCodeRepository.findBySwiftCode(potentialHQCode);
+            if (headquarter != null) {
+                dto.setHeadquarter(false);
+                BranchDTO hqBranch = convertToBranchDTO(headquarter);
+                List<BranchDTO> branches = new ArrayList<>();
+                branches.add(hqBranch);
 
+                List<SwiftCode> siblingBranches = swiftCodeRepository
+                        .findBranchesByHeadquarterPrefix(searchPrefix, swiftCode);
+                branches.addAll(siblingBranches.stream()
+                        .map(this::convertToBranchDTO)
+                        .collect(Collectors.toList()));
+
+                dto.setBranches(branches);
+            }
+        } else {
+            List<SwiftCode> branches = swiftCodeRepository
+                    .findBranchesByHeadquarterPrefix(searchPrefix, swiftCode);
             dto.setBranches(branches.stream()
                     .map(this::convertToBranchDTO)
                     .collect(Collectors.toList()));
