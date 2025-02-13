@@ -1,8 +1,11 @@
 package com.atis.remitly_project;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -33,9 +36,14 @@ public class SwiftCodeController {
     public ResponseEntity<MessageResponseDTO> deleteSwiftCode(@PathVariable String swiftCode) {
         return ResponseEntity.ok(swiftCodeService.deleteSwiftCode(swiftCode));
     }
+
     @PostMapping("/parse")
-    public ResponseEntity<List<SwiftCode>> parseAndSave(@RequestParam("filePath") String filePath) throws IOException {
-        List<SwiftCode> swiftCodes = excelParser.parse(filePath);
-        return ResponseEntity.ok(swiftCodeRepository.saveAll(swiftCodes));
+    public ResponseEntity<List<SwiftCode>> parseAndSave(@RequestParam("filePath") String filePath) {
+        try {
+            List<SwiftCode> swiftCodes = excelParser.parse(filePath);
+            return ResponseEntity.ok(swiftCodeRepository.saveAll(swiftCodes));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error parsing Excel file: " + e.getMessage());
+        }
     }
 }
