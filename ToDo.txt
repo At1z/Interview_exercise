@@ -1,3 +1,4 @@
-1. More validation and exception
-2. Unit test
-3. Frontend
+1. Format of response for first and second endpoint/ request for third
+2. More validation and exception
+3. Unit test
+4. Frontend
