@@ -1,0 +1,9 @@
+-- Add column as nullable first
+ALTER TABLE swift_code ADD COLUMN IF NOT EXISTS headquarter BOOLEAN;
+
+-- Update existing records
+UPDATE swift_code 
+SET headquarter = (swift_code LIKE '%XXX');
+
+-- Now add not-null constraint
+ALTER TABLE swift_code ALTER COLUMN headquarter SET NOT NULL;
