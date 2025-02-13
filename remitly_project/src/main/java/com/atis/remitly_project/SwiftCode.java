@@ -18,7 +18,6 @@ public class SwiftCode {
     private String townName;
     private String countryName;
     private String timeZone;
-
     private boolean headquarter;
 
     @PrePersist
