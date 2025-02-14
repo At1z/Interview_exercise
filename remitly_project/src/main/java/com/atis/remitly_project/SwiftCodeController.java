@@ -59,7 +59,7 @@ public class SwiftCodeController {
 
     //  curl.exe -X POST 'http://localhost:8080/v1/swift-codes' `
     // -H 'Content-Type: application/json' `
-    // -d '{\"address\": \"Ul. SZARA KRAKÓW\", \"bankName\": \"PKO BANK POLSKI\", \"countryISO2\": \"PL\", \"countryName\": \"POLAND\", \"headquarter\": true, \"swiftCode\": \"AAAAACAAXXX\"}'
+    // -d '{\"address\": \"UL. SZARA KRAKOW\", \"bankName\": \"PKO BANK POLSKI\", \"countryISO2\": \"PL\", \"countryName\": \"POLAND\", \"isHeadquarter\": true, \"swiftCode\": \"AAAAACAAXXX\"}'
 
     @DeleteMapping("/{swiftCode}")
     public ResponseEntity<MessageResponseDTO> deleteSwiftCode(@PathVariable String swiftCode) {

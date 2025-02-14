@@ -1,4 +1,4 @@
-1. Format of response for first and second endpoint in branches switch position of headquarter and swiftCode/ request for third always add code_type BIC11,time_zone based on country 
 2. More validation and exception addressb bank_name, countryiso2, country_ name, swift_code(contains 11 numbers if ends with XXX is headquarter), twon_name uper case, time_zone start with Upper Case letter and have Upper Case after "/", good exceptions like there is no country with this countryiso2, country_name etc
+3. Unit test
 4. Backend Contenerization
-5. Frontend is considered 
+
