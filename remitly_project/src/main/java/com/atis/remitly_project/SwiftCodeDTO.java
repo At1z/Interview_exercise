@@ -32,7 +32,8 @@ public class SwiftCodeDTO {
     private boolean isHeadquarter;
 
     @NotBlank(message = "Swift code is required")
-    @Pattern(regexp = "^[A-Z0-9]{11}$", message = "Swift code must be exactly 11 uppercase letters or numbers")
+    @Pattern(regexp = "^[A-Z]{6}[A-Z0-9]{5}$",
+            message = "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers")
     private String swiftCode;
 
     private List<BranchDTO> branches;
