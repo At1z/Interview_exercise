@@ -68,7 +68,6 @@ public class SwiftCodeService {
     }
 
     public MessageResponseDTO addSwiftCode(SwiftCodeDTO swiftCodeDTO) {
-        // Perform custom validation
         swiftCodeDTO.validate();
 
         if (swiftCodeRepository.findBySwiftCode(swiftCodeDTO.getSwiftCode()) != null) {
