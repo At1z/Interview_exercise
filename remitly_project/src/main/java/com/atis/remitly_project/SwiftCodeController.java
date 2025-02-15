@@ -1,5 +1,6 @@
 package com.atis.remitly_project;
 
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
@@ -111,6 +112,7 @@ public class SwiftCodeController {
         }
     }
     // curl.exe -X  POST "http://localhost:8080/v1/swift-codes/parse?filePath=/Users/nosta/Desktop/remitly/Interview_exercise/Interns_2025_SWIFT_CODES.xlsx"
+
     @ExceptionHandler(SwiftCodeValidationException.class)
     public ResponseEntity<MessageResponseDTO> handleValidationException(SwiftCodeValidationException e) {
         return ResponseEntity
@@ -131,6 +133,15 @@ public class SwiftCodeController {
                 .body(new MessageResponseDTO(String.join(", ", errors)));
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<MessageResponseDTO> handleConstraintViolationException(ConstraintViolationException ex) {
+        String errorMessage = ex.getConstraintViolations().stream()
+                .map(violation -> violation.getMessage())
+                .collect(Collectors.joining(", "));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new MessageResponseDTO(errorMessage));
+    }
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<MessageResponseDTO> handleResponseStatusException(ResponseStatusException ex) {
         return ResponseEntity
