@@ -1,3 +1,4 @@
-1. Add headquarter column while creating database // done
-2. Show branches while headquarter is true
-3. Try to resolve the problem with adding and deleting SwiftCodes
+2. More validation and exception addressb bank_name, countryiso2, country_ name, swift_code(contains 11 numbers if ends with XXX is headquarter), twon_name uper case, time_zone start with Upper Case letter and have Upper Case after "/", good exceptions like there is no country with this countryiso2, country_name etc
+3. Unit test
+4. Backend Contenerization
+

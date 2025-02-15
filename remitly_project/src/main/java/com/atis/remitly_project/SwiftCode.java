@@ -2,6 +2,8 @@ package com.atis.remitly_project;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @Entity
@@ -18,11 +20,13 @@ public class SwiftCode {
     private String townName;
     private String countryName;
     private String timeZone;
-    private boolean headquarter;
+
+    @Getter @Setter
+    private boolean isHeadquarter;
 
     @PrePersist
     @PreUpdate
     public void setHeadquarterValue() {
-        this.headquarter = (this.swiftCode != null && this.swiftCode.endsWith("XXX"));
+        this.isHeadquarter = (this.swiftCode != null && this.swiftCode.endsWith("XXX"));
     }
 }
