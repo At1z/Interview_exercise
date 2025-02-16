@@ -41,6 +41,15 @@ class SwiftCodeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Order(1)
+    @Test
+    void parseExcel_ReturnsOk() throws Exception {
+        String filePath = "src/main/java/com/atis/remitly_project/Interns_2025_SWIFT_CODES.xlsx";
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
+                        .param("filePath", filePath)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
     @Test
     void getSwiftCode_InvalidSwiftCode_ReturnsBadRequest() throws Exception {
@@ -119,7 +128,7 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Order(1)
+    @Order(2)
     @Test
     void addSwiftCode_ValidInput_ReturnsOk() throws Exception {
         SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
@@ -258,7 +267,7 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Non-headquarter swift code cannot end with XXX"));
     }
-    @Order(2)
+    @Order(3)
     @Test
     void deleteSwiftCode_ValidSwiftCode_ReturnsOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AASPUTAAXXX")
@@ -300,7 +309,7 @@ class SwiftCodeControllerTest {
                         "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
                 ));
     }
-    @Order(3)
+    @Order(4)
     @Test
     void parseExcel_ValidFile_ReturnsOk() throws Exception {
         String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
@@ -309,7 +318,7 @@ class SwiftCodeControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-    @Order(4)
+    @Order(5)
     @Test
     void parseExcel_DuplicateFile_ReturnsInternalServerError() throws Exception {
         String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
@@ -330,7 +339,7 @@ class SwiftCodeControllerTest {
                 .andExpect(jsonPath("$.message").value("Error parsing Excel file: src/test/java/com/atis/remitly_prooooooooooject/test.xlsx (No such file or directory)"));
     }
 
-    @Order(5)
+    @Order(6)
     @Test
     void delete_parseExcelTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/TESTTESTTES")
