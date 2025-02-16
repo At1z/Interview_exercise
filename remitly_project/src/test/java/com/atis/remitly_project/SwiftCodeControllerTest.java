@@ -44,7 +44,7 @@ class SwiftCodeControllerTest {
     @Order(1)
     @Test
     void parseExcel_ReturnsOk() throws Exception {
-        String filePath = "src/main/java/com/atis/remitly_project/Interns_2025_SWIFT_CODES.xlsx";
+        String filePath = "src/main/resources/Interns_2025_SWIFT_CODES.xlsx";
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
                         .param("filePath", filePath)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -184,7 +184,6 @@ class SwiftCodeControllerTest {
 
     @Test
     void addSwiftCode_DuplicateSwiftCode_ReturnsDuplicateMessage() throws Exception {
-        // Arrange: create a SwiftCodeDTO with a duplicate swift code
         SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
         swiftCodeDTO.setAddress("UL. SKARA KRAKOW");
         swiftCodeDTO.setBankName("PKO BAK POLSKI");
