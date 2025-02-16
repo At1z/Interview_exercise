@@ -3,6 +3,7 @@ package com.atis.remitly_project;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -77,8 +78,6 @@ public class SwiftCodeController {
         return ResponseEntity.ok(swiftCodeService.addSwiftCode(swiftCodeDTO));
     }
 
-
-
     //  curl.exe -X POST 'http://localhost:8080/v1/swift-codes' `
     // -H 'Content-Type: application/json' `
     // -d '{\"address\": \"UL. SZARA KRAKOW\", \"bankName\": \"PKO BANK POLSKI\", \"countryISO2\": \"PL\", \"countryName\": \"POLAND\", \"isHeadquarter\": true, \"swiftCode\": \"AAAAACAAXXX\"}'
@@ -107,8 +106,12 @@ public class SwiftCodeController {
         try {
             List<SwiftCode> swiftCodes = excelParser.parse(filePath);
             return ResponseEntity.ok(swiftCodeRepository.saveAll(swiftCodes));
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Some of Swift Code already in database");
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error parsing Excel file: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Error parsing Excel file: " + e.getMessage());
         }
     }
     // curl.exe -X  POST "http://localhost:8080/v1/swift-codes/parse?filePath=/Users/nosta/Desktop/remitly/Interview_exercise/Interns_2025_SWIFT_CODES.xlsx"
