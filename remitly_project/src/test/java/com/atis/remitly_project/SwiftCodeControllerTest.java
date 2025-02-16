@@ -1,7 +1,10 @@
 package com.atis.remitly_project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +19,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -114,6 +118,8 @@ class SwiftCodeControllerTest {
         mockMvc.perform(get("/v1/swift-codes/country/QQ"))
                 .andExpect(status().isNotFound());
     }
+
+    @Order(1)
     @Test
     void addSwiftCode_ValidInput_ReturnsOk() throws Exception {
         SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
@@ -122,7 +128,7 @@ class SwiftCodeControllerTest {
         swiftCodeDTO.setCountryISO2("PL");
         swiftCodeDTO.setCountryName("POLAND");
         swiftCodeDTO.setHeadquarter(true);
-        swiftCodeDTO.setSwiftCode("AABPFUAAXXX");
+        swiftCodeDTO.setSwiftCode("AASPUTAAXXX");
 
         MessageResponseDTO responseDTO = new MessageResponseDTO("Swift code added successfully");
         when(swiftCodeService.addSwiftCode(swiftCodeDTO)).thenReturn(responseDTO);
@@ -252,9 +258,10 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Non-headquarter swift code cannot end with XXX"));
     }
+    @Order(2)
     @Test
     void deleteSwiftCode_ValidSwiftCode_ReturnsOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AABPFUAAXXX")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AASPUTAAXXX")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Swift code deleted successfully"));
@@ -293,6 +300,42 @@ class SwiftCodeControllerTest {
                         "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
                 ));
     }
+    @Order(3)
+    @Test
+    void parseExcel_ValidFile_ReturnsOk() throws Exception {
+        String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
+                        .param("filePath", filePath)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Order(4)
+    @Test
+    void parseExcel_DuplicateFile_ReturnsInternalServerError() throws Exception {
+        String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
+                        .param("filePath", filePath)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect( jsonPath("$.message").value("Some of Swift Code already in database"));
+    }
 
+    @Test
+    void parseExcel_WrongPathToFile_ReturnsInternalServerError() throws Exception {
+        String filePath = "src/test/java/com/atis/remitly_prooooooooooject/test.xlsx";
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
+                        .param("filePath", filePath)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Error parsing Excel file: src/test/java/com/atis/remitly_prooooooooooject/test.xlsx (No such file or directory)"));
+    }
 
+    @Order(5)
+    @Test
+    void delete_parseExcelTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/TESTTESTTES")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Swift code deleted successfully"));
+    }
 }
