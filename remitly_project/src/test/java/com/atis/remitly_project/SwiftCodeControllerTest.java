@@ -122,7 +122,7 @@ class SwiftCodeControllerTest {
         swiftCodeDTO.setCountryISO2("PL");
         swiftCodeDTO.setCountryName("POLAND");
         swiftCodeDTO.setHeadquarter(true);
-        swiftCodeDTO.setSwiftCode("AABPFWAAXXX");
+        swiftCodeDTO.setSwiftCode("AABPFUAAXXX");
 
         MessageResponseDTO responseDTO = new MessageResponseDTO("Swift code added successfully");
         when(swiftCodeService.addSwiftCode(swiftCodeDTO)).thenReturn(responseDTO);
@@ -252,4 +252,47 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Non-headquarter swift code cannot end with XXX"));
     }
+    @Test
+    void deleteSwiftCode_ValidSwiftCode_ReturnsOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AABPFUAAXXX")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Swift code deleted successfully"));
+    }
+
+    @Test
+    void deleteSwiftCode_SwiftCodeNotFound_ReturnsNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AABPFUAAXXX")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteSwiftCode_InvalidSwiftCode_ReturnsBadRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/INVALID123"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
+                ));
+    }
+
+    @Test
+    void deleteSwiftCode_InvalidSwiftCodeLowercase_ReturnsBadRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AIZKLV22XXx"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
+                ));
+    }
+
+    @Test
+    void deleteSwiftCode_InvalidSwiftCodeNumberInFirstSix_ReturnsBadRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/v1/swift-codes/AI2KLV22XXX"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
+                ));
+    }
+
+
 }
