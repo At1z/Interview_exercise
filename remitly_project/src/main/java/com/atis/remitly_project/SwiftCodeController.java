@@ -77,8 +77,6 @@ public class SwiftCodeController {
         return ResponseEntity.ok(swiftCodeService.addSwiftCode(swiftCodeDTO));
     }
 
-
-
     //  curl.exe -X POST 'http://localhost:8080/v1/swift-codes' `
     // -H 'Content-Type: application/json' `
     // -d '{\"address\": \"UL. SZARA KRAKOW\", \"bankName\": \"PKO BANK POLSKI\", \"countryISO2\": \"PL\", \"countryName\": \"POLAND\", \"isHeadquarter\": true, \"swiftCode\": \"AAAAACAAXXX\"}'
