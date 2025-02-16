@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class SwiftCodeControllerTest {
 
 
@@ -311,7 +313,7 @@ class SwiftCodeControllerTest {
     @Order(4)
     @Test
     void parseExcel_ValidFile_ReturnsOk() throws Exception {
-        String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
+        String filePath = "src/main/resources/test.xlsx";
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
                         .param("filePath", filePath)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -320,7 +322,7 @@ class SwiftCodeControllerTest {
     @Order(5)
     @Test
     void parseExcel_DuplicateFile_ReturnsInternalServerError() throws Exception {
-        String filePath = "src/test/java/com/atis/remitly_project/test.xlsx";
+        String filePath = "src/main/resources/test.xlsx";
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes/parse")
                         .param("filePath", filePath)
                         .contentType(MediaType.APPLICATION_JSON))

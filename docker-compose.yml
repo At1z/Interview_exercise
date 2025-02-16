@@ -31,7 +31,6 @@ services:
       SPRING_JPA_HIBERNATE_DDL-AUTO: update
     volumes:
       - ./remitly_project/src/main/resources:/app/data
-      - ./remitly_project/src/test/java/com/atis/remitly_project:/app/test-data
 
 volumes:
   postgres_data: {}
