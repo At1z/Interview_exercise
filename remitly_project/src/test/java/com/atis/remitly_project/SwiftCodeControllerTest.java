@@ -104,7 +104,7 @@ class SwiftCodeControllerTest {
 
     @Test
     void getConutryISO2_ValidCountryISO2_NotFound() throws Exception {
-        mockMvc.perform(get("/v1/country/QQ"))
+        mockMvc.perform(get("/v1/swift-codes/country/QQ"))
                 .andExpect(status().isNotFound());
     }
 }
