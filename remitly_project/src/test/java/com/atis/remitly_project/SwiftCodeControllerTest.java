@@ -122,7 +122,7 @@ class SwiftCodeControllerTest {
         swiftCodeDTO.setCountryISO2("PL");
         swiftCodeDTO.setCountryName("POLAND");
         swiftCodeDTO.setHeadquarter(true);
-        swiftCodeDTO.setSwiftCode("AABXOOAPXXX");
+        swiftCodeDTO.setSwiftCode("AABPFWAAXXX");
 
         MessageResponseDTO responseDTO = new MessageResponseDTO("Swift code added successfully");
         when(swiftCodeService.addSwiftCode(swiftCodeDTO)).thenReturn(responseDTO);
@@ -158,7 +158,7 @@ class SwiftCodeControllerTest {
         swiftCodeDTO.setCountryISO2("PL");
         swiftCodeDTO.setCountryName("POLAND");
         swiftCodeDTO.setHeadquarter(true);
-        swiftCodeDTO.setSwiftCode("AABCBCAAXXX");
+        swiftCodeDTO.setSwiftCode("AABCIWAAXXX");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -166,6 +166,25 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("bankName: Bank name must contain only uppercase letters"));
     }
+
+    @Test
+    void addSwiftCode_DuplicateSwiftCode_ReturnsDuplicateMessage() throws Exception {
+        // Arrange: create a SwiftCodeDTO with a duplicate swift code
+        SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
+        swiftCodeDTO.setAddress("UL. SKARA KRAKOW");
+        swiftCodeDTO.setBankName("PKO BAK POLSKI");
+        swiftCodeDTO.setCountryISO2("PL");
+        swiftCodeDTO.setCountryName("POAND");
+        swiftCodeDTO.setHeadquarter(false);
+        swiftCodeDTO.setSwiftCode("PTFIPLPWAMS");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(swiftCodeDTO)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("Swift code already exists"));
+    }
+
 
     @Test
     void addSwiftCode_InvalidCountryISO2_ReturnsBadRequest() throws Exception {
