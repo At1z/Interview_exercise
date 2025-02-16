@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -124,7 +122,7 @@ class SwiftCodeControllerTest {
         swiftCodeDTO.setCountryISO2("PL");
         swiftCodeDTO.setCountryName("POLAND");
         swiftCodeDTO.setHeadquarter(true);
-        swiftCodeDTO.setSwiftCode("AABXBCAAXXX");
+        swiftCodeDTO.setSwiftCode("AABXOOAPXXX");
 
         MessageResponseDTO responseDTO = new MessageResponseDTO("Swift code added successfully");
         when(swiftCodeService.addSwiftCode(swiftCodeDTO)).thenReturn(responseDTO);
@@ -202,7 +200,37 @@ class SwiftCodeControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("countryName: Country name must contain only uppercase letters"));
     }
+    @Test
+    void addSwiftCode_InvalidHeadquarterSwiftCode_ReturnsBadRequest() throws Exception {
+        SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
+        swiftCodeDTO.setAddress("UL. SZARA KRAKOW");
+        swiftCodeDTO.setBankName("PKO BANK POLSKI");
+        swiftCodeDTO.setCountryISO2("PL");
+        swiftCodeDTO.setCountryName("POLAND");
+        swiftCodeDTO.setHeadquarter(true);
+        swiftCodeDTO.setSwiftCode("AABCBCAAABC");
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(swiftCodeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Headquarter swift code must end with XXX"));
+    }
 
+    @Test
+    void addSwiftCode_InvalidNonHeadquarterSwiftCode_ReturnsBadRequest() throws Exception {
+        SwiftCodeDTO swiftCodeDTO = new SwiftCodeDTO();
+        swiftCodeDTO.setAddress("UL. SZARA KRAKOW");
+        swiftCodeDTO.setBankName("PKO BANK POLSKI");
+        swiftCodeDTO.setCountryISO2("PL");
+        swiftCodeDTO.setCountryName("POLAND");
+        swiftCodeDTO.setHeadquarter(false);
+        swiftCodeDTO.setSwiftCode("AABCBCAAXXX");
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/v1/swift-codes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(swiftCodeDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Non-headquarter swift code cannot end with XXX"));
+    }
 }
