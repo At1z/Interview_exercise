@@ -11,8 +11,8 @@ public class SwiftCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String countryISO2;
+    @Column(unique = true)
     private String swiftCode;
     private String codeType;
     private String bankName;
