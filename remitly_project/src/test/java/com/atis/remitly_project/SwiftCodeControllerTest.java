@@ -68,4 +68,43 @@ class SwiftCodeControllerTest {
                         "Swift code must be exactly 11 characters: 6 letters followed by 5 letters or numbers"
                 ));
     }
+
+    @Test
+    void getConutryISO2_ValidCountryISO2_isOK() throws Exception {
+        mockMvc.perform(get("/v1/swift-codes/country/AL"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getConutryISO2_InvalidSwiftCodeLowercase_ReturnsBadRequest() throws Exception {
+        mockMvc.perform(get("/v1/swift-codes/country/Al"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Country ISO2 code must be exactly 2 uppercase letters"
+                ));
+    }
+
+    @Test
+    void getConutryISO2_InvalidCountryISO2Length_ReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/v1/swift-codes/country/ALL"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Country ISO2 code must be exactly 2 uppercase letters"
+                ));
+    }
+
+    @Test
+    void getConutryISO2_InvalidCountryISO2_ReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/v1/swift-codes/country/12"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(
+                        "Country ISO2 code must be exactly 2 uppercase letters"
+                ));
+    }
+
+    @Test
+    void getConutryISO2_ValidCountryISO2_NotFound() throws Exception {
+        mockMvc.perform(get("/v1/country/QQ"))
+                .andExpect(status().isNotFound());
+    }
 }
