@@ -7,8 +7,9 @@
     <li><strong>OS:</strong> Ubuntu 20.04.6 LTS</li>
     <li><strong>Docker:</strong> version 27.5.1</li>
     <li>
-      <strong>Java:</strong> OpenJDK version "17.0.14" (build 17.0.14+7-Ubuntu-120.04)
-      <ul>
+      <strong>Java:
+        <ul>
+        <li></strong> OpenJDK version "17.0.14" (build 17.0.14+7-Ubuntu-120.04)</li>
         <li>OpenJDK Runtime Environment (build 17.0.14+7-Ubuntu-120.04)</li>
         <li>OpenJDK 64-Bit Server VM (build 17.0.14+7-Ubuntu-120.04, mixed mode, sharing)</li>
       </ul>
