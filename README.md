@@ -17,7 +17,7 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
    ```bash
    git clone https://github.com/At1z/Interview_exercise.git
    cd Interview_exercise
-   
+   ```
 ## Building and running application
 
 1. **Build the Docker image (includes unit and integration tests):**
