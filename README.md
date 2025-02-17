@@ -54,22 +54,22 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
   ```
   Expected Output:
   ```json
-  {
-    "address": "MIHAILA TALA STREET 1  RIGA, RIGA, LV-1045",
-    "bankName": "ABLV BANK, AS IN LIQUIDATION",
-    "countryISO2": "LV",
-    "countryName": "LATVIA",
-    "isHeadquarter": true,
-    "swiftCode": "AIZKLV22XXX",
-    "branches": [
-      {
-        "address": "ELIZABETES STREET 23  RIGA, RIGA, LV-1010",
-        "bankName": "ABLV BANK, AS IN LIQUIDATION",
-        "countryISO2": "LV",
-        "isHeadquarter": false,
-        "swiftCode": "AIZKLV22CLN"
-      }
-    ]
-  }
-```
+    {
+      "address": "MIHAILA TALA STREET 1  RIGA, RIGA, LV-1045",
+      "bankName": "ABLV BANK, AS IN LIQUIDATION",
+      "countryISO2": "LV",
+      "countryName": "LATVIA",
+      "isHeadquarter": true,
+      "swiftCode": "AIZKLV22XXX",
+      "branches": [
+        {
+          "address": "ELIZABETES STREET 23  RIGA, RIGA, LV-1010",
+          "bankName": "ABLV BANK, AS IN LIQUIDATION",
+          "countryISO2": "LV",
+          "isHeadquarter": false,
+          "swiftCode": "AIZKLV22CLN"
+        }
+      ]
+    }
+ ```
 
