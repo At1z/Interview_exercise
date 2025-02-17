@@ -105,20 +105,4 @@ cd Interview_exercise</code></pre>
   <pre><code>{
   "message": "Swift code deleted successfully"
 }</code></pre>
-  
-  <h2>Testing</h2>
-  <ul>
-    <li>Use the provided <code>curl</code> commands to test the endpoints.</li>
-    <li>Ensure that the Excel file (<code>Interns_2025_SWIFT_CODES.xlsx</code>) is located in the correct directory (<code>/app/data/</code>) within the Docker container.</li>
-  </ul>
-  
-  <h2>Notes</h2>
-  <ul>
-    <li><strong>Docker:</strong> Ensure Docker and Docker Compose are installed on your system.</li>
-    <li><strong>Build Process:</strong> The Docker build process runs both unit and integration tests.</li>
-    <li><strong>Data Path:</strong> The Excel file must be accessible at the provided file path for parsing.</li>
-  </ul>
-  
-  <h2>License</h2>
-  <p>*Include your license information here if applicable.*</p>
 </body>
