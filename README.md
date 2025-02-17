@@ -17,7 +17,7 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
    ```bash
    git clone https://github.com/At1z/Interview_exercise.git
    cd Interview_exercise
-   ```
+   
 ## Building and running application
 
 1. **Build the Docker image (includes unit and integration tests):**
@@ -31,13 +31,44 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
 ## API Endpoints
 1. Parse Excel into Database
 
-    Endpoint: @POST /v1/swift-codes/parse
+   Endpoint: @POST /v1/swift-codes/parse
 
-    Description: Parses the specified Excel file and inserts the data into the database.
+   Description: Parses the specified Excel file and inserts the data into the database.
 
-    Example Usage:
-```bash
-curl -X POST "http://localhost:8080/v1/swift-codes/parse?filePath=/app/data/Interns_2025_SWIFT_CODES.xlsx"
-```
+   Example Usage:
+   ```bash
+   curl -X POST "http://localhost:8080/v1/swift-codes/parse?filePath=/app/data/Interns_2025_SWIFT_CODES.xlsx"
+   ```
+  Expected Output:
+  Returns all data that was added to the database.
+2. Retrieve Swift Code by Code
+
+   Endpoint: GET /v1/swift-codes/{swiftCode}
+
+   Description: Retrieves the details for a specific SWIFT code, including any associated branch information.
+
+   Example Usage:
+  ```bash
+   curl -X GET "http://localhost:8080/v1/swift-codes/AIZKLV22XXX" -H "Content-Type: application/json"
+  ```
 Expected Output:
-Returns all data that was added to the database.
+```json
+{
+  "address": "MIHAILA TALA STREET 1  RIGA, RIGA, LV-1045",
+  "bankName": "ABLV BANK, AS IN LIQUIDATION",
+  "countryISO2": "LV",
+  "countryName": "LATVIA",
+  "isHeadquarter": true,
+  "swiftCode": "AIZKLV22XXX",
+  "branches": [
+    {
+      "address": "ELIZABETES STREET 23  RIGA, RIGA, LV-1010",
+      "bankName": "ABLV BANK, AS IN LIQUIDATION",
+      "countryISO2": "LV",
+      "isHeadquarter": false,
+      "swiftCode": "AIZKLV22CLN"
+    }
+  ]
+}
+```
+
