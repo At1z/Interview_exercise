@@ -29,18 +29,17 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
   docker compose up
   ```
 ## API Endpoints
-1. Parse Excel into Database
+1. **Parse Excel into Database**
 
-   Endpoint: @POST /v1/swift-codes/parse
+   **Endpoint:** @POST /v1/swift-codes/parse
 
-   Description: Parses the specified Excel file and inserts the data into the database.
+   **Description:** Parses the specified Excel file and inserts the data into the database.
 
-   Example Usage:
+   **Example Usage:**
    ```bash
    curl -X POST "http://localhost:8080/v1/swift-codes/parse?filePath=/app/data/Interns_2025_SWIFT_CODES.xlsx"
    ```
-    Expected Output:
-    Returns all data that was added to the database.
+    **Expected Output:** Returns all data that was added to the database.
   
 2. Retrieve Swift Code by Code
 
