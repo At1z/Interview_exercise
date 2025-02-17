@@ -41,6 +41,7 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
    ```
   Expected Output:
   Returns all data that was added to the database.
+  
 2. Retrieve Swift Code by Code
 
    Endpoint: GET /v1/swift-codes/{swiftCode}
