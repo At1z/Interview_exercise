@@ -1,6 +1,6 @@
 # Interview Exercise
 
-This repository contains an application for parsing SWIFT codes from an Excel file into a database and providing REST endpoints to manage and retrieve SWIFT code data.
+Application for parsing SWIFT codes from an Excel file into a database and providing REST endpoints to manage and retrieve SWIFT code data.
 
 ## Environment
 
@@ -28,3 +28,16 @@ This repository contains an application for parsing SWIFT codes from an Excel fi
   ```bash
   docker compose up
   ```
+## API Endpoints
+1. Parse Excel into Database
+
+    Endpoint: @POST /v1/swift-codes/parse
+
+    Description: Parses the specified Excel file and inserts the data into the database.
+
+    Example Usage:
+```bash
+curl -X POST "http://localhost:8080/v1/swift-codes/parse?filePath=/app/data/Interns_2025_SWIFT_CODES.xlsx"
+```
+Expected Output:
+Returns all data that was added to the database.
