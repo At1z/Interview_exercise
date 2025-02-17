@@ -39,8 +39,8 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
    ```bash
    curl -X POST "http://localhost:8080/v1/swift-codes/parse?filePath=/app/data/Interns_2025_SWIFT_CODES.xlsx"
    ```
-  Expected Output:
-  Returns all data that was added to the database.
+    Expected Output:
+    Returns all data that was added to the database.
   
 2. Retrieve Swift Code by Code
 
@@ -52,24 +52,24 @@ Application for parsing SWIFT codes from an Excel file into a database and provi
   ```bash
    curl -X GET "http://localhost:8080/v1/swift-codes/AIZKLV22XXX" -H "Content-Type: application/json"
   ```
-Expected Output:
-```json
-{
-  "address": "MIHAILA TALA STREET 1  RIGA, RIGA, LV-1045",
-  "bankName": "ABLV BANK, AS IN LIQUIDATION",
-  "countryISO2": "LV",
-  "countryName": "LATVIA",
-  "isHeadquarter": true,
-  "swiftCode": "AIZKLV22XXX",
-  "branches": [
-    {
-      "address": "ELIZABETES STREET 23  RIGA, RIGA, LV-1010",
-      "bankName": "ABLV BANK, AS IN LIQUIDATION",
-      "countryISO2": "LV",
-      "isHeadquarter": false,
-      "swiftCode": "AIZKLV22CLN"
-    }
-  ]
-}
+  Expected Output:
+  ```json
+  {
+    "address": "MIHAILA TALA STREET 1  RIGA, RIGA, LV-1045",
+    "bankName": "ABLV BANK, AS IN LIQUIDATION",
+    "countryISO2": "LV",
+    "countryName": "LATVIA",
+    "isHeadquarter": true,
+    "swiftCode": "AIZKLV22XXX",
+    "branches": [
+      {
+        "address": "ELIZABETES STREET 23  RIGA, RIGA, LV-1010",
+        "bankName": "ABLV BANK, AS IN LIQUIDATION",
+        "countryISO2": "LV",
+        "isHeadquarter": false,
+        "swiftCode": "AIZKLV22CLN"
+      }
+    ]
+  }
 ```
 
